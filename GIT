@@ -1,0 +1,152 @@
+- 특정 태그를 삭제하고 싶다면- iTerm2
+- git —version
+    - 깃이 설치되어있는지 확인
+- git config —global -e
+- 이름, 이메일
+    - 수정
+        - git config —global user.name
+        - git config —global user.email
+    - 확인
+        - git config user.name
+        - git config user.email
+- 설정
+    - git config —global [core.auto](http://core.auto)crlf input
+    - git config —global [core.auto](http://core.auto)crlf true
+- workflow
+    - working directory
+        - untracked: 기존에 존재하던 프로젝트에서 깃을 초기화하거나 새로 만들어진 파일, 트래킹된 파일 중에서도 깃이 지금 이 순간에서 수정되
+        - tracked: 트랙한 파일
+            - unmodified: 이전 버전과 비교하여 수정되지 않은 파일
+            - modified:  이전과 비교하여 수정된 파일
+            - 여기서는 modified만 올리게 되어있음
+    - staging area
+    - .git directory
+
+push 업로드하는 것
+
+pull 다운로드하는 것
+
+1. 기본 명령어 정복하기
+    - echo ~
+    - git status\
+        - 깃의 전반적인 상태
+        - modified
+            - 는 수정된 파일
+    - git add ~
+        - working directory.untracked > staging area
+        - ex) git add a.txt
+        - git add *.txt
+            - 모든 텍스트 파일 추가
+        - git add .
+            
+            
+    - 기본 생성되는 브랜치를 정할때
+        - git config —global init.defaultBranch (기본설정브랜치)
+        - 이렇게 설정하면 로컬에서 git init 실행시 기본 브랜치로 설정됨.
+    - git rm —cached
+    - git commit -m “커밋메세지”
+    - commit 은
+    - git push <저장소명> <브랜치명>
+        - 예시)
+            - git push origin master
+    - 깃 상태
+        - git status -s
+            - 간략하게 확인
+        - git status
+            - 상태확인
+    - git diff
+        - working directory에만 어떤 게 수정됐는지 보고싶다면
+        - git diff - -staged
+        - git diff - -cached
+            - 상단 두가지 동일하게 staging area에 있는 파일 변경 사항 확인가능
+            - -는 이전파일, +는 현재파일
+    - 파일 변경시 팁
+        - git mv 전파일 후파일
+            - 자동으로 git에 변경사항이 확인됨
+    - git log
+        - git log
+            - 간단하게 보기
+        - git log -p
+            - 변경된 옵션 확인
+        - git log  —oneline
+            - 간편하게 해쉬코드의 앞자리 문자열과 커밋 메세지 확인 가능
+            - git log —online —reverse 는 커밋의 정렬이 첫번째부터 나옴
+        - head~1/ head~2/head~3
+            - 물결 뒤 숫자는인 1은 현재 커밋의 이전 커밋, 2는 이전이전 커밋
+    - 로그 이쁘게 만들기
+        - git —pretty=oneline
+        - git —pretty=format:”%h %an %ar”
+            - 원하는대로 커스텀할 수 있음
+        - git checkout fix
+        - git log  (—oneline) —graph —all
+            - 전체적인 로그를 보기 위해 쓰이는 것
+        - log --graph --all --pretty=format:'%C(yellow)[%ad]%C(reset) %C(green)[%h]%C(reset) | %C(white)%s %C(bold red){{%an}}%C(reset) %C(blue)%d%C(reset)' --date=short
+            - 앨리 커스텀
+        - git hist (앨리가 alias)
+        - git config --global alias.hist “커스텀 내용”
+    - 로그 심화내용
+        - git log —(oneline) -(숫자)
+            - 최근 (숫자) 만
+        - git log —author=”ellie”
+            - 특정 커밋한 사람만 확인 가능
+        - git log —before=”2022-06-21”
+            - 지정된 날짜 이전 커밋만 확인 가능
+        - git log —grep=”project”
+            - project가 포함된 커밋만 확인 가능
+        - git log -S “about”
+            - 소스속에 해당 단어를 찾고싶을때
+        - git log -S “about” -p
+            - 코드 내용 안에 해당 단어가 있는 걸 확인 가능
+        - git log 파일이름.확장자명
+            - 해당 파일에 대한 로그 내용 확인 가능
+            - git log -p 파일이름.확장자명
+                - 더 자세한 내용 확인 가능
+            - git log -s 파일이름.확장자명
+                - 조금 간단하게 확인 가능
+            - git log HEAD
+                - ==git log
+                - git log HEAD~1
+                    - 지금 헤드 바로 이전의 부모부터 볼 수 있음
+                - git log HEAD~2
+                    - 지금 헤드 2번째 전의 부모부터 볼 수 있음.
+    - 태그는 왜 필요할까
+        - emantic versining
+            - 숫자를 세가지로 나눠서 표현함.
+                - ex) v2.1.0
+                    - 왼쪽부터 .을 기준으로 순서대로 major, minor, fix라고 부름.
+                    - major
+                        - 기능이 추가되었고나 전체적인 업데이트가 발생하엿을때 하나씩 올림
+                    - minor
+                        - 커다란 기능 중 조금 기능이 업데이트 되었을때
+                    - fix
+                        - 기존에 존재하는 기능에서 오류 수정을 하였을때, 성능이 조금 개선이 됐을때
+            - 얼마나 의미있게 일관적으로 사용하느냐가 중요
+    - 태그 데모
+        - git tag (문자열)
+            - 
+        - git hist에서 보면 태그를 확인 할 수 잇음
+        - git tag (문자열) (해쉬코드)
+            - 특정한 커밋에 태그를 달고싶을때 특정한 해쉬코드를 복사후
+        - git tag (문자열) (해쉬코드) -a -m “관련 문자열”
+            - == git tag (문자열) (해쉬코드) -am “관련 문자열”
+            - 버전 이외에 버전에 추가로 더 자세한 내용을 작성하고 싶다면
+                - -a annotate의 약자
+        - git show (태그명)
+            - 해당 태그를 볼 수 있음.
+        - git tag
+            - 만들어진 모든 태그 확인 가능
+        - git tag -l “문자열”
+            - 
+        - git tag -d (태그내용)
+            - 해당 태그 삭제
+        - 특정 단어가 있는 태그만 확인 하고 싶을때
+        - git checkout (태그이름)
+            - 해당태그로 이동 가능(HEAD) 이동
+        - git checkout -b (새로운브랜치이름) (태그이름)
+            - 체크아웃하면서 새로운 브랜치를 만들고 싶다면
+        - git push origin (태그이름)
+            - 내가 만든 특정 태그를 서버와 연동하고 싶다면
+        - git push origin —tags
+            - 모든 태그를 연동하고 싶다면
+        - git push origin --delete (태그이름)
+            - 특정 태그를 삭제하고 싶다면
